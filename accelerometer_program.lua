@@ -35,6 +35,7 @@ csv2tensor = require 'csv2tensor'
 -- The data used by this program is placed into a csv file. 
 
 data = csv2tensor.load("train_data_short_test3.csv", {exclude={"0"}})
+test_data = csv2tensor.load("test_data_really_small.csv", {exclude={"0", "1"}})
 
 -----------------------------------------------------------------------------------------
 -- 2. Neural Network Architecture
@@ -42,7 +43,7 @@ data = csv2tensor.load("train_data_short_test3.csv", {exclude={"0"}})
 model = nn.Sequential()
 model:add(nn.Linear(3, 7))
 model:add(nn.LogSoftMax())
-criterion = 
+criterion = nn.ClassNLLCriterion()
 
 -----------------------------------------------------------------------------------------
 -- 3. Evaluation Function
@@ -85,6 +86,7 @@ end
 -----------------------------------------------------------------------------------------
 -- 6. Testing
 
-testdata = csv2tensor.load("test_data_really_small.csv", {exclude={"0", "1"}})
-print(tostring(model:forward(test_data)))
-print(tostring("class: " .. tostring(class)))
+for i = 1, (#test_data) [1] do
+	pred = (model:forward(test_data[i][{{1,3}}]))
+	print (pred[1])
+end 
